@@ -1,0 +1,206 @@
+---
+title: "Ayudantia de Modelos Mixtos en Bioestadística II"
+author: "Elena Lazo"
+date: "Noviembre 2025"
+format:
+  html: default
+---
+
+Para esta ayudantía se muestran los datos de 30 ratas hembra que fueron asignadas al azar a uno de tres grupos de tratamiento, consistentes en la administración de una dosis alta, baja y control de una droga.
+
+El objetivo del estudio fue comparar el peso de los cachorros de las crías de las camadas nacidas de ratas hembra que recibieron el tratamiento con drogas en dosis altas y bajas con el peso de los cachorros de las camadas que recibieron el tratamiento de control. La pregunta de investigación fue ¿Existe un efecto del tratamiento con drogas (dosis alta, baja, control) en el peso al nacer?
+
+Las variables incluidas aparecen en la siguiente tabla:
+
+weight -> Peso de nacimiento de cada cría 
+sex -> Sexo de la rata (male, female) 
+Litter -> N° identificación de la camada 
+Lsize -> Tamaño de la camada (número de crías por camada) 
+Treatment ->Nivel de dosis de fármaco experimental asignado a la camada (alto, bajo, control)
+
+#### 1. Inspeccionando la base de datos indique: ¿qué variable indica la medida repetida? ¿dónde se muestra la dependencia? Fundamente su respuesta.
+```{r}
+#| label: inspeccion
+#| echo: true
+#| message: false
+#| warning: false
+
+library(readxl)
+nombre_base <- "../bases_datos/ratas_ayudantia_mixtos.xlsx"
+ratas <- read_excel(nombre_base)
+
+head(ratas)
+str(ratas)
+```
+
+- La variable que indica la **medida repetida** es weight, ya que se mide el peso al nacer de varias crías dentro de la misma camada. Es decir, se repite la medición (peso) para distintos individuos que pertenecen a una misma unidad experimental (la madre o camada).
+
+- La **dependencia** se muestra en la variable Litter, que identifica a cada camada. Al observar la base de datos, se ve que hay múltiples crías con el mismo valor de Litter, lo que indica que existen observaciones agrupadas dentro de una misma unidad (la madre).
+
+> Por ejemplo, las primeras 6 observaciones del dataset muestran a 6 crías distintas, todas de la camada 1 (Litter = 1). Esto implica que las mediciones no son independientes entre sí, ya que el peso de los cachorros dentro de una misma camada puede estar influenciado por factores maternos comunes (genética, ambiente intrauterino, etc.). Por lo tanto, se debe considerar un enfoque que permita modelar esta correlación intra-camada, como los modelos mixtos con intercepto aleatorio por Litter.
+
+#### 2. Elabore un gráfico que muestre el comportamiento de la variable “weight” respecto al sexo, según cada grupo de tratamiento. Interprete sus hallazgos.
+```{r}
+#| label: grafico
+#| echo: true
+#| message: false
+#| warning: false
+
+library(ggplot2)
+
+# Convertir las variables a factor si aún no lo están
+ratas$sex <- as.factor(ratas$sex)
+ratas$Treatment <- as.factor(ratas$Treatment)
+
+# Crear boxplot
+ggplot(ratas, aes(x = sex, y = as.numeric(weight), fill = sex)) +
+  geom_boxplot() +
+  facet_wrap(~Treatment) +
+  theme_minimal() +
+  labs(
+    title = "Peso al nacer por sexo y tratamiento",
+    x = "Sexo",
+    y = "Peso al nacer",
+    fill = "Sexo"
+  )
+
+```
+**Control:**
+
+- Los machos parecen tener una mediana de peso ligeramente mayor que las hembras.
+- Mayor dispersión en los machos (mayor rango intercuartil y presencia de outliers).
+
+**Tratamiento Alto:**
+
+- Las diferencias entre sexos son menores.
+- Ambos sexos presentan una mediana más baja que el grupo Control, sugiriendo posible efecto reductor del tratamiento.
+
+**Tratamiento Bajo:**
+
+- Patrón similar al tratamiento alto: medianas bajas y muy similares entre sexos.
+- Dispersión más reducida que en el grupo control.
+
+> **Conclusión general:**
+El tratamiento parece reducir el peso al nacer comparado con el grupo control, independientemente del sexo.
+Aunque hay una ligera diferencia de peso entre machos y hembras, no parece ser muy marcada ni constante en todos los tratamientos.
+
+#### 3. Realice un modelo lineal para explicar la variable “weight” en función del tratamiento, sexo y tamaño de la camada. Muestre e interprete los resultados más relevantes, incluyendo el R2.
+```{r}
+#| label: lineal
+#| echo: true
+#| message: false
+#| warning: false
+
+ratas$Treatment <- as.factor(ratas$Treatment)
+ratas$sex <- as.factor(ratas$sex)
+ratas$weight <- as.numeric(ratas$weight)
+
+# Ajustar el modelo lineal
+modelo_lm <- lm(weight ~ Treatment + sex + Lsize, data = ratas)
+
+# Mostrar resultados del modelo
+summary(modelo_lm)
+```
+**Intercepto (Control - Female):**
+
+- El peso promedio al nacer para una cría hembra en el grupo control con tamaño de camada 0 (hipotético) es de aproximadamente 7.9 gramos.
+
+**Tratamiento:**
+
+- Las crías del grupo High pesan en promedio 0.9g menos que las del grupo Control (p < 0.01), efecto estadísticamente significativo.
+- Las crías del grupo Low pesan en promedio 0.4g menos que las del grupo control, también significativo (p < 0.05).
+
+**Sexo:**
+
+- Los machos pesan 0.27g más que las hembras, efecto estadísticamente significativo. (p = 0.06).
+
+**Tamaño de camada (Lsize):**
+
+- Por cada cría adicional en la camada, el peso promedio baja 0.12g, lo que sugiere un efecto de competencia intrauterina. Este resultado es no significativo, pero podría ser relevante clínicamente.
+
+**R² = 0.32:** El modelo explica el 32% de la variabilidad del peso al nacer.
+
+#### 4. Ajuste un modelo para explicar la variable “weight” en función del tratamiento, sexo y tamaño de la camada, con intercepto aleatorio. Muestre e interprete los resultados más relevantes. ¿Qué puede decir respecto al modelo obtenido en la pregunta 3?
+```{r}
+#| label: mixto
+#| echo: true
+#| message: false
+#| warning: false
+library(lme4)
+modelo_mixto <- lmer(weight ~ Treatment + sex + Lsize + (1 | Litter), data = ratas)
+
+# Resumen del modelo
+summary(modelo_mixto)
+
+```
+**Efectos fijos** Los efectos principales se interpretan como efectos globales cuando no hay interacción
+
+- Intercepto: Peso promedio en hembras del grupo Control, con Lsize = 0 (hipotético).
+- TreatmentHigh: Crías del grupo High pesan 0.86g menos que Control. > Aquí, el coeficiente de TreatmentHigh es el efecto promedio del tratamiento, independientemente del sexo.
+- TreatmentLow: Crías del grupo Low pesan 0.43g menos que Control.
+- sexMale: Los machos pesan en promedio 0.36g más que las hembras. > El coeficiente de sexMale es la diferencia promedio entre machos y hembras, independientemente del tratamiento.
+- Lsize: Por cada cría adicional en la camada, el peso baja 0.13g.
+
+**Efectos aleatorios**
+
+- Intercepto aleatorio por Litter: Varianza = 0.097 → SD = 0.31 (indica que hay variabilidad real entre camadas, justifica el uso del modelo mixto)
+- Error residual (variabilidad entre crías dentro de la misma camada): SD = 0.40
+
+#### 5. Al modelo obtenido en la pregunta 4, agregue la interacción entre tratamiento y sexo, determine si es significativa o no. ¿Cómo se podría interpretar esta interacción?
+```{r}
+#| label: interaccion
+#| echo: true
+#| message: false
+#| warning: false
+
+library(lme4)
+modelo_interaccion <- lmer(weight ~ Treatment * sex + Lsize + (1 | Litter), data = ratas)
+summary(modelo_interaccion)
+```
+**Efectos principales:** Aqui se interpretan de forma diferente porque los efectos principales ya no son efectos globales, sino condicionales.
+
+- Intercepto: Peso promedio de hembras en grupo Control con Lsize = 0
+- TreatmentHigh: El grupo High pesa menos que el grupo Control (en hembras). Diferencia de peso en hembras: High vs Control
+- TreatmentLow: El grupo Low también pesa menos que el Control (en hembras).
+- sexMale: Los machos pesan más que las hembras (en grupo Control). Diferencia entre machos y hembras en grupo Control
+- Lsize: A mayor tamaño de camada, menor peso al nacer.
+
+**Interacción Treatment * sex:**
+
+> Cuando tú incluyes una interacción como Treatment * sex, estás diciendo que: “El efecto de Treatment depende del valor de sex, y viceversa.”
+
+- TreatmentHigh:sexMale: no significativo - Cambio adicional en el efecto del tratamiento High para machos vs hembras
+- TreatmentLow:sexMale: no significativo
+
+**Conclusión sobre la interacción:**
+
+- Las interacciones no son estadísticamente significativas (ambos t-values < 1).
+- Esto indica que el efecto del tratamiento sobre el peso al nacer es similar en machos y hembras.
+- Aunque los coeficientes son negativos, no hay evidencia estadística de que el tratamiento afecte de forma distinta según el sexo.
+
+**El término TreatmentHigh:sexMale = -0.40 si hubiera sido significativo** EJEMPLO
+
+- Los machos del grupo de dosis alta pesan 0.40g menos que las hembras, más allá del efecto principal de sexo y del tratamiento por separado. En otras palabras, el tratamiento afecta más negativamente a los machos.
+
+> "El efecto del tratamiento High es 0.4g más negativo en los machos que en las hembras."
+
+O visto desde otro ángulo:
+
+> "La diferencia entre sexos es menor en el grupo High que en el grupo Control."
+
+Es decir, el tratamiento reduce el peso más en machos que en hembras.
+
+📈 Tip profesional
+**Usar emmeans o modelbased::estimate_means() para obtener las medias ajustadas por grupo es la forma más clara y recomendada de comunicar resultados cuando hay interacción.**
+
+#### 6. Compare los dos modelos anteriores y seleccione uno de los dos modelos para responder a la pregunta de investigación. Justifique su respuesta.
+
+```{r}
+anova(modelo_mixto, modelo_interaccion)
+```
+
+El modelo con interacción (Treatment * sex) no mejora significativamente el ajuste:
+
+- p = 0.615 → muy lejos del umbral de significancia (0.05).
+- El AIC incluso aumenta con el modelo más complejo, lo cual indica peor ajuste relativo.
+- Por lo tanto, el modelo más simple (modelo_mixto) es preferible.
