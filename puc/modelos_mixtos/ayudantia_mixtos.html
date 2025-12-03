@@ -116,7 +116,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Para esta ayudantía se muestran los datos de 30 ratas hembra que fueron asignadas al azar a uno de tres grupos de tratamiento, consistentes en la administración de una dosis alta, baja y control de una droga.</p>
 <p>El objetivo del estudio fue comparar el peso de los cachorros de las crías de las camadas nacidas de ratas hembra que recibieron el tratamiento con drogas en dosis altas y bajas con el peso de los cachorros de las camadas que recibieron el tratamiento de control. La pregunta de investigación fue ¿Existe un efecto del tratamiento con drogas (dosis alta, baja, control) en el peso al nacer?</p>
 <p>Las variables incluidas aparecen en la siguiente tabla:</p>
-<p>weight -&gt; Peso de nacimiento de cada cría sex -&gt; Sexo de la rata (male, female) Litter -&gt; N° identificación de la camada Lsize -&gt; Tamaño de la camada (número de crías por camada) Treatment -&gt;Nivel de dosis de fármaco experimental asignado a la camada (alto, bajo, control)</p>
+<p>weight -&gt; Peso de nacimiento de cada cría</p>
+<p>sex -&gt; Sexo de la rata (male, female)</p>
+<p>Litter -&gt; N° identificación de la camada</p>
+<p>Lsize -&gt; Tamaño de la camada (número de crías por camada)</p>
+<p>Treatment -&gt;Nivel de dosis de fármaco experimental asignado a la camada (alto, bajo, control)</p>
 <section id="inspeccionando-la-base-de-datos-indique-qué-variable-indica-la-medida-repetida-dónde-se-muestra-la-dependencia-fundamente-su-respuesta." class="level4">
 <h4 class="anchored" data-anchor-id="inspeccionando-la-base-de-datos-indique-qué-variable-indica-la-medida-repetida-dónde-se-muestra-la-dependencia-fundamente-su-respuesta.">1. Inspeccionando la base de datos indique: ¿qué variable indica la medida repetida? ¿dónde se muestra la dependencia? Fundamente su respuesta.</h4>
 <div class="cell">
@@ -254,7 +258,7 @@ F-statistic: 54.76 on 4 and 317 DF,  p-value: &lt; 2.2e-16</code></pre>
 <ul>
 <li>Por cada cría adicional en la camada, el peso promedio baja 0.12g, lo que sugiere un efecto de competencia intrauterina. Este resultado es no significativo, pero podría ser relevante clínicamente.</li>
 </ul>
-<p><strong>R² = 0.32:</strong> El modelo explica el 32% de la variabilidad del peso al nacer.</p>
+<p><strong>R² = 0.40:</strong> El modelo explica el 40% de la variabilidad del peso al nacer.</p>
 </section>
 <section id="ajuste-un-modelo-para-explicar-la-variable-weight-en-función-del-tratamiento-sexo-y-tamaño-de-la-camada-con-intercepto-aleatorio.-muestre-e-interprete-los-resultados-más-relevantes.-qué-puede-decir-respecto-al-modelo-obtenido-en-la-pregunta-3" class="level4">
 <h4 class="anchored" data-anchor-id="ajuste-un-modelo-para-explicar-la-variable-weight-en-función-del-tratamiento-sexo-y-tamaño-de-la-camada-con-intercepto-aleatorio.-muestre-e-interprete-los-resultados-más-relevantes.-qué-puede-decir-respecto-al-modelo-obtenido-en-la-pregunta-3">4. Ajuste un modelo para explicar la variable “weight” en función del tratamiento, sexo y tamaño de la camada, con intercepto aleatorio. Muestre e interprete los resultados más relevantes. ¿Qué puede decir respecto al modelo obtenido en la pregunta 3?</h4>

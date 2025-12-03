@@ -12,10 +12,14 @@ El objetivo del estudio fue comparar el peso de los cachorros de las crías de l
 
 Las variables incluidas aparecen en la siguiente tabla:
 
-weight -> Peso de nacimiento de cada cría 
+weight -> Peso de nacimiento de cada cría
+
 sex -> Sexo de la rata (male, female) 
+
 Litter -> N° identificación de la camada 
+
 Lsize -> Tamaño de la camada (número de crías por camada) 
+
 Treatment ->Nivel de dosis de fármaco experimental asignado a la camada (alto, bajo, control)
 
 #### 1. Inspeccionando la base de datos indique: ¿qué variable indica la medida repetida? ¿dónde se muestra la dependencia? Fundamente su respuesta.
@@ -118,7 +122,7 @@ summary(modelo_lm)
 
 - Por cada cría adicional en la camada, el peso promedio baja 0.12g, lo que sugiere un efecto de competencia intrauterina. Este resultado es no significativo, pero podría ser relevante clínicamente.
 
-**R² = 0.32:** El modelo explica el 32% de la variabilidad del peso al nacer.
+**R² = 0.40:** El modelo explica el 40% de la variabilidad del peso al nacer.
 
 #### 4. Ajuste un modelo para explicar la variable “weight” en función del tratamiento, sexo y tamaño de la camada, con intercepto aleatorio. Muestre e interprete los resultados más relevantes. ¿Qué puede decir respecto al modelo obtenido en la pregunta 3?
 ```{r}

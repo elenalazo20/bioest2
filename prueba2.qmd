@@ -1,0 +1,76 @@
+---
+title: "I2 - Parte 2"
+author: "Elena Lazo"
+format: pdf
+editor: visual
+---
+
+### MSP3004/MMM1004 - Bioestadística II
+##### Segundo Semestre - 2025
+
+#### Pregunta sobre Modelos Mixtos (16 puntos)
+
+El siguiente estudio busca explicar factores que afecten la producción de leche materna (LM) en madres de niños prematuros de muy bajo peso de nacimiento. La base DataProdLM.txt. contiene entre 3 y 5 mediciones de la producción de LM (ml) para 46 duplas madre/hijo junto con covariables de la madre y del recién nacido. El detalle de las variables disponibles es:
+
+dupla: indicador de la dupla madre-hijo.
+
+VolLM: volumne de LM producida por la madre (ml/kg).
+
+tiempo: semana desde el nacimiento en que se hizo la medición del volúmen de LM.
+
+egRN: edad gestacional del RN al nacer
+
+SexoRN: sexo del RN (F: femenino, M: masculino)
+Apgar1: Puntaje Apgar al minuto del nacimiento (1 : ≤3 (muy grave); 0 : > 3)
+
+Apgar5: Puntaje Apgar a los 5 minutos del nacimiento (1 : ≤3 (muy grave); 0 :> 3)
+
+PjeautoeficM: puntaje en una escala del sentimiento de autoeficacia de la madre frente a la producción de LM. Los valores posibles van de 0 (nula autoeficacia) a 30 (completa autoeficacia).
+
+EdadM: edad de la madre al nacimiento del RN
+
+ModExtrac: modalidad de extracción de LM (1: solo manual; 2: mixta (manual o bomba eléctrica); 3: solo bomba eléctrica).
+
+Se le pide evaluar posibles factores que afecten la producción de leche materna. Trabaje con un nivel de significancia α = 0,05.
+
+**1. De acuerdo a lo descrito en el enunciado, indique el rol de cada variable en el modelo. (1 pto)**
+```{r}
+
+```
+
+**2. Complete la tabla con la estadística descriptiva de la muestra. Cuide de seleccionar la primera medición para este efecto. (2 puntos)**
+```{r}
+
+```
+
+**3. Haga una figura que permita ilustrar el comportamiento del outcome. Escriba el pie de figura que relate brevemente lo que se ilustra (1 pto)**
+
+**4. Justique brevemente la utilización de un modelo mixto para este set de datos.(1 pto)**
+
+**5. Escriba el modelo (teórico) que permite contestar la pregunta de investigación utilizando todas las variables disponibles. Este modelo debe ser coherente con el que ajustará en R. Para las variables categóricas, explicite la categoría que se visualizará en el modelo. (2 pto)**
+
+**6. En este contexto, ¿cómo se interpreta el intercepto aleatorio? >Se pueden considerar todos iguales estos interceptos? Explicite la prueba de hipótesis e interprete la implicancia de que los interceptos sean todos iguales o diferentes (2 ptos)**
+
+**7. ¿Son significativos los efectos fijos? Incluya una tabla con la estimación de cada parámetro, su error estándar o IC95% y su valor p. (2 pto)**
+
+**8. Interprete las variables significativas. (1 pto)**
+
+**9. De manera teórica ¿qué estructura de covarianza aplica mejor a este set de datos? (1 pto)**
+
+**10. Escoja una variable categórica y replique la figura del punto 3, integrando la visualización de los niveles de la variable escogida. ¿Es coherente la figura con la significancia de la variable en el modelo? Justique la última pregunta brevemente (1 pto)**
+
+**11. Escriba, en un par de líneas, los resultados obtenidos (desde el punto de vista epidemiológico) de ajustar el modelo mixto. (1 pto)**
+
+**12. Escriba un párrafo que indique la metodología utilizada. Específicamente debe contener: (i) tipo de modelo ajustado, (ii) variables usadas y sus niveles, (iii) Rol de cada variable dentro del modelo, (iv) prueba utilizada para determinar si una variable es significativa, (v) nivel de significancia utilizada y (vi) software estadístico utilizado (1 pto)**
+
+#### Solo para alumnos de doctorado
+De manera adicional, y como una manera de conocer factores que favorecerían una mayor producción de LM, se consideró la máxima producción de LM de la madre (ml) y se asoció con covariables medidas en ese momento, dos de la cuales son nivel de eficacia (PtjeautoeficaciaM)y condición de primeriza (1: Sí, 0: No).
+
+La evidenica clínica dice que, por un lado, madres que son primerizas tienen menos seguridad en sí mismas (lo que disminuiría su producción) pero tiene mayor tiempo disponiblenpara dedicarle a la extracción de LM (lo que subiría su producción) que aquellas madres que ya tienen hijos. Se quiere ajustar un modelo [Modelo 1] para explorar un efecto diferenciado según la combinación de autoeficacia y condición de primípara.
+
+**13. Identifique el modelo a ajustar y justifique el modelo escogido. (2 puntos)**
+
+**14. Escriba el modelo (2 puntos)**
+
+
+
